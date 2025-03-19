@@ -1,0 +1,57 @@
+#include <cmath>
+#include <stdlib.h>
+#include <string.h>
+#include <memory>
+#include <vector>
+#include <map>
+#include <string>
+#include <random>
+#include "Matrix.cpp"
+#include "NNData.cpp"
+
+
+
+class NN_Layer: public NN_Data
+{
+    private:
+        std::shared_ptr<Matrix<double>> random_matrix_gen(int row, int col);
+
+    public:
+        NN_Layer(int row, int col);
+        ~NN_Layer();
+};
+
+NN_Layer::NN_Layer(int row, int col)
+{
+    this->data = this->random_matrix_gen(row,col);
+}
+
+std::shared_ptr<Matrix<double>> NN_Layer::random_matrix_gen(int row, int col)
+{
+    auto matrix = std::make_shared<Matrix<double>>(row,col);
+    std::random_device rd;
+    std::mt19937 g(rd());
+    
+    std::uniform_real_distribution<double> dist(-0.5,0.5);
+
+    for(int i = 0; i < row; i++)
+    {
+        for(int j = 0; j < col; j++)
+        {
+            matrix->at(i,j) = dist(g);
+        }
+    }
+
+    return matrix;
+}
+
+NN_Layer::~NN_Layer()
+{
+}
+
+
+// int main()
+// {
+//     auto layer = NN_Layer(5,5);
+//     layer.print_matrix();
+// }
